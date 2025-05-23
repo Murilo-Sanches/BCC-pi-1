@@ -33,7 +33,7 @@ class Sketch {
         p.mousePressed = this.mousePressed.bind(this);
     }
 
-    private setup() {
+    private setup(): void {
         this.canvas = this.p5.createCanvas(this.width, this.height);
 
         this.canvas.parent(app);
@@ -54,9 +54,9 @@ class Sketch {
         }
     }
 
-    private draw() {}
+    private draw(): void {}
 
-    private mousePressed() {
+    private mousePressed(): void {
         const { mouseX, mouseY } = this.p5;
 
         const { startX, startY } = this.pluck(mouseX, mouseY);
@@ -69,7 +69,7 @@ class Sketch {
         );
     }
 
-    private pluck(x: number, y: number) {
+    private pluck(x: number, y: number): { startX: number; startY: number } {
         const startX = Math.floor(x / this.tileSize);
         const startY = Math.floor(y / this.tileSize);
 
