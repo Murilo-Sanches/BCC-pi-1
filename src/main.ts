@@ -26,6 +26,7 @@ class Sketch {
 
         p.setup = this.setup.bind(this);
         p.draw = this.draw.bind(this);
+        p.mousePressed = this.mousePressed.bind(this);
     }
 
     setup() {
@@ -48,6 +49,22 @@ class Sketch {
     }
 
     draw() {}
+
+    mousePressed() {
+        const { mouseX, mouseY } = this.p5;
+
+        const { startX, startY } = this.pluck(mouseX, mouseY);
+
+        this.p5.fill('red');
+        this.p5.square(startX * 25, startY * 25, 25);
+    }
+
+    pluck(x: number, y: number) {
+        const startX = Math.floor(x / 25);
+        const startY = Math.floor(y / 25);
+
+        return { startX, startY };
+    }
 }
 
 new p5((p: p5) => new Sketch(p));
