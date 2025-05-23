@@ -9,16 +9,16 @@ const app = document.getElementById('app')!;
  */
 
 class Sketch {
-    p5: p5;
+    private readonly p5: p5;
 
-    canvas: p5.Renderer | null;
+    private canvas: p5.Renderer | null;
 
-    width: number;
-    height: number;
+    private readonly width: number;
+    private readonly height: number;
 
-    tileSize: number;
+    private readonly tileSize: number;
 
-    constructor(p: p5) {
+    public constructor(p: p5) {
         this.p5 = p;
 
         this.canvas = null;
@@ -33,7 +33,7 @@ class Sketch {
         p.mousePressed = this.mousePressed.bind(this);
     }
 
-    setup() {
+    private setup() {
         this.canvas = this.p5.createCanvas(this.width, this.height);
 
         this.canvas.parent(app);
@@ -54,9 +54,9 @@ class Sketch {
         }
     }
 
-    draw() {}
+    private draw() {}
 
-    mousePressed() {
+    private mousePressed() {
         const { mouseX, mouseY } = this.p5;
 
         const { startX, startY } = this.pluck(mouseX, mouseY);
@@ -69,7 +69,7 @@ class Sketch {
         );
     }
 
-    pluck(x: number, y: number) {
+    private pluck(x: number, y: number) {
         const startX = Math.floor(x / this.tileSize);
         const startY = Math.floor(y / this.tileSize);
 
