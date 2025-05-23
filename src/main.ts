@@ -1,24 +1,53 @@
-import './style.css'
-import typescriptLogo from './typescript.svg'
-import viteLogo from '/vite.svg'
-import { setupCounter } from './counter.ts'
+import p5 from 'p5';
+import './style.css';
 
-document.querySelector<HTMLDivElement>('#app')!.innerHTML = `
-  <div>
-    <a href="https://vite.dev" target="_blank">
-      <img src="${viteLogo}" class="logo" alt="Vite logo" />
-    </a>
-    <a href="https://www.typescriptlang.org/" target="_blank">
-      <img src="${typescriptLogo}" class="logo vanilla" alt="TypeScript logo" />
-    </a>
-    <h1>Vite + TypeScript</h1>
-    <div class="card">
-      <button id="counter" type="button"></button>
-    </div>
-    <p class="read-the-docs">
-      Click on the Vite and TypeScript logos to learn more
-    </p>
-  </div>
-`
+const app = document.getElementById('app')!;
 
-setupCounter(document.querySelector<HTMLButtonElement>('#counter')!)
+/**
+ * Referencias:
+ * @see Obter posição do mouse {@link https://p5js.org/reference/p5/mouseX/}
+ */
+
+class Sketch {
+    p5: p5;
+
+    canvas: p5.Renderer | null;
+
+    width: number;
+    height: number;
+
+    constructor(p: p5) {
+        this.p5 = p;
+
+        this.canvas = null;
+
+        this.width = 600;
+        this.height = 400;
+
+        p.setup = this.setup.bind(this);
+        p.draw = this.draw.bind(this);
+    }
+
+    setup() {
+        this.canvas = this.p5.createCanvas(this.width, this.height);
+
+        this.canvas.parent(app);
+
+        this.p5.background(220);
+
+        const tileSize = 25;
+
+        const tilesPerRow = this.width / tileSize;
+        const tilesPerColumn = this.height / tileSize;
+
+        for (let i = 0; i < tilesPerRow; i++) {
+            for (let j = 0; j < tilesPerColumn; j++) {
+                this.p5.square(i * tileSize, j * tileSize, tileSize);
+            }
+        }
+    }
+
+    draw() {}
+}
+
+new p5((p: p5) => new Sketch(p));
