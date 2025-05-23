@@ -45,11 +45,7 @@ class Sketch {
 
         for (let i = 0; i < tilesPerRowCount; i++) {
             for (let j = 0; j < tilesPerColumnCount; j++) {
-                this.p5.square(
-                    i * this.tileSize,
-                    j * this.tileSize,
-                    this.tileSize
-                );
+                this.drawSquare(i, j);
             }
         }
     }
@@ -62,11 +58,7 @@ class Sketch {
         const { startX, startY } = this.pluck(mouseX, mouseY);
 
         this.p5.fill('red');
-        this.p5.square(
-            startX * this.tileSize,
-            startY * this.tileSize,
-            this.tileSize
-        );
+        this.drawSquare(startX, startY);
     }
 
     private pluck(x: number, y: number): { startX: number; startY: number } {
@@ -74,6 +66,10 @@ class Sketch {
         const startY = Math.floor(y / this.tileSize);
 
         return { startX, startY };
+    }
+
+    private drawSquare(x: number, y: number): void {
+        this.p5.square(x * this.tileSize, y * this.tileSize, this.tileSize);
     }
 }
 
