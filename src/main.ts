@@ -16,6 +16,8 @@ class Sketch {
     width: number;
     height: number;
 
+    tileSize: number;
+
     constructor(p: p5) {
         this.p5 = p;
 
@@ -23,6 +25,8 @@ class Sketch {
 
         this.width = 600;
         this.height = 400;
+
+        this.tileSize = 25;
 
         p.setup = this.setup.bind(this);
         p.draw = this.draw.bind(this);
@@ -36,14 +40,16 @@ class Sketch {
 
         this.p5.background(220);
 
-        const tileSize = 25;
+        const tilesPerRowCount = this.width / this.tileSize;
+        const tilesPerColumnCount = this.height / this.tileSize;
 
-        const tilesPerRow = this.width / tileSize;
-        const tilesPerColumn = this.height / tileSize;
-
-        for (let i = 0; i < tilesPerRow; i++) {
-            for (let j = 0; j < tilesPerColumn; j++) {
-                this.p5.square(i * tileSize, j * tileSize, tileSize);
+        for (let i = 0; i < tilesPerRowCount; i++) {
+            for (let j = 0; j < tilesPerColumnCount; j++) {
+                this.p5.square(
+                    i * this.tileSize,
+                    j * this.tileSize,
+                    this.tileSize
+                );
             }
         }
     }
@@ -56,12 +62,16 @@ class Sketch {
         const { startX, startY } = this.pluck(mouseX, mouseY);
 
         this.p5.fill('red');
-        this.p5.square(startX * 25, startY * 25, 25);
+        this.p5.square(
+            startX * this.tileSize,
+            startY * this.tileSize,
+            this.tileSize
+        );
     }
 
     pluck(x: number, y: number) {
-        const startX = Math.floor(x / 25);
-        const startY = Math.floor(y / 25);
+        const startX = Math.floor(x / this.tileSize);
+        const startY = Math.floor(y / this.tileSize);
 
         return { startX, startY };
     }
