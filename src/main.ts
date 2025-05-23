@@ -6,6 +6,7 @@ const app = document.getElementById('app')!;
 /**
  * Referencias:
  * @see Obter posição do mouse {@link https://p5js.org/reference/p5/mouseX/}
+ * @see Modificar frame rate {@link https://p5js.org/reference/p5/frameRate/}
  */
 
 class Sketch {
@@ -30,7 +31,6 @@ class Sketch {
 
         p.setup = this.setup.bind(this);
         p.draw = this.draw.bind(this);
-        p.mousePressed = this.mousePressed.bind(this);
     }
 
     private setup(): void {
@@ -48,17 +48,30 @@ class Sketch {
                 this.drawSquare(i, j);
             }
         }
+
+        this.p5.frameRate(10);
     }
 
-    private draw(): void {}
+    private clickedPositions: { x: number; y: number }[] = [];
 
-    private mousePressed(): void {
-        const { mouseX, mouseY } = this.p5;
+    private draw(): void {
+        const { mouseX, mouseY, mouseIsPressed } = this.p5;
 
-        const { startX, startY } = this.pluck(mouseX, mouseY);
+        if (mouseIsPressed) {
+            const { startX, startY } = this.pluck(mouseX, mouseY);
 
-        this.p5.fill('red');
-        this.drawSquare(startX, startY);
+            this.p5.fill('red');
+            this.drawSquare(startX, startY);
+
+            this.clickedPositions.push({ x: startX, y: startY });
+        }
+
+        if (this.clickedPositions.length) {
+            for (const clickedPosition of this.clickedPositions) {
+                clickedPosition.y++;
+                this.drawSquare(clickedPosition.x, clickedPosition.y);
+            }
+        }
     }
 
     private pluck(x: number, y: number): { startX: number; startY: number } {
