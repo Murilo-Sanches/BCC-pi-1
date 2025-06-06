@@ -18,16 +18,23 @@ class Sketch {
     private readonly height: number;
 
     private readonly tileSize: number;
+    private readonly tilesPerRowCount: number;
+    private readonly tilesPerColumnCount: number;
+
+    private grid: number[][];
 
     public constructor(p: p5) {
         this.p5 = p;
 
         this.canvas = null;
 
-        this.width = 600;
-        this.height = 400;
+        this.width = 100;
+        this.height = 50;
 
-        this.tileSize = 25;
+        this.tileSize = 10;
+        this.tilesPerRowCount = this.width / this.tileSize;
+        this.tilesPerColumnCount = this.height / this.tileSize;
+        this.grid = [];
 
         p.setup = this.setup.bind(this);
         p.draw = this.draw.bind(this);
@@ -40,36 +47,46 @@ class Sketch {
 
         this.p5.background(220);
 
-        const tilesPerRowCount = this.width / this.tileSize;
-        const tilesPerColumnCount = this.height / this.tileSize;
+        for (let i = 0; i < this.tilesPerRowCount; i++) {
+            this.grid.push([]);
 
-        for (let i = 0; i < tilesPerRowCount; i++) {
-            for (let j = 0; j < tilesPerColumnCount; j++) {
-                this.drawSquare(i, j);
+            for (let j = 0; j < this.tilesPerColumnCount; j++) {
+                this.grid[i][j] = 0;
+
+                if (i === 1 && j === 1) {
+                    this.grid[i][j] = 1;
+                }
             }
         }
 
         this.p5.frameRate(10);
     }
 
-    private clickedPositions: { x: number; y: number }[] = [];
-
     private draw(): void {
-        const { mouseX, mouseY, mouseIsPressed } = this.p5;
+        this.p5.background(220);
 
-        if (mouseIsPressed) {
-            const { startX, startY } = this.pluck(mouseX, mouseY);
+        const { mouseX, mouseY } = this.p5;
 
-            this.p5.fill('red');
-            this.drawSquare(startX, startY);
+        for (let i = 0; i < this.grid.length; i++) {
+            const row = this.grid[i];
 
-            this.clickedPositions.push({ x: startX, y: startY });
-        }
+            for (let j = 0; j < row.length; j++) {
+                const cell = row[j];
 
-        if (this.clickedPositions.length) {
-            for (const clickedPosition of this.clickedPositions) {
-                clickedPosition.y++;
-                this.drawSquare(clickedPosition.x, clickedPosition.y);
+                if (cell && this.grid[i][j] < this.tilesPerColumnCount - 1) {
+                    this.grid[i][j] = this.grid[i][j] + 1;
+                    console.log(this.grid);
+
+                    this.p5.fill('lightgreen');
+                    this.drawSquare(i, this.grid[i][j]);
+
+                    continue;
+                }
+
+                if (cell) {
+                    this.p5.fill('red');
+                    this.drawSquare(i, this.grid[i][j]);
+                }
             }
         }
     }
